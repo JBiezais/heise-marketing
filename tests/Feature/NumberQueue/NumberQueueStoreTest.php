@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\NumberQueue;
 
+use App\NumberQueue\Database\Models\NumberQueue;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -56,5 +58,30 @@ class NumberQueueStoreTest extends TestCase
 
         $response->assertStatus(201);
         $this->assertDatabaseHas('number_queue', ['value' => 0]);
+    }
+
+    public function test_store_accepts_large_number(): void
+    {
+        $largeNumber = 1287368172369;
+
+        $response = $this->postJson('/api/numbers', [
+            'number' => $largeNumber,
+        ]);
+
+        $response->assertStatus(201)
+            ->assertJson(['message' => 'Number added']);
+        $this->assertDatabaseHas('number_queue', ['value' => $largeNumber]);
+    }
+
+    public function test_store_returns_422_when_service_throws_exception(): void
+    {
+        NumberQueue::creating(function (): never {
+            throw new Exception('Database error');
+        });
+
+        $response = $this->postJson('/api/numbers', ['number' => 1]);
+
+        $response->assertStatus(422)
+            ->assertJson(['message' => 'Something went wrong']);
     }
 }
