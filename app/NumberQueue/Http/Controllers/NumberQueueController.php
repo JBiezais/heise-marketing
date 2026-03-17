@@ -21,7 +21,7 @@ class NumberQueueController extends Controller
 
         try {
             $numberQueueService->execute($data);
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Something went wrong',
             ], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -36,7 +36,7 @@ class NumberQueueController extends Controller
 
         try {
             $text = $numberQueueToTextConversionService->execute($data);
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return response()->json([
                 'message' => 'Something went wrong',
             ], Response::HTTP_UNPROCESSABLE_ENTITY);

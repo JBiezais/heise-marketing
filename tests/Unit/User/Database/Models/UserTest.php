@@ -5,6 +5,7 @@ namespace Tests\Unit\User\Database\Models;
 use App\User\Database\Models\User;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -80,6 +81,6 @@ class UserTest extends TestCase
 
     public function test_user_uses_notifiable_trait(): void
     {
-        $this->assertContains(\Illuminate\Notifications\Notifiable::class, class_uses_recursive(User::class));
+        $this->assertContains(Notifiable::class, class_uses_recursive(User::class));
     }
 }

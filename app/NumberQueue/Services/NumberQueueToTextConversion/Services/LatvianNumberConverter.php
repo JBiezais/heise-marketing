@@ -79,6 +79,7 @@ class LatvianNumberConverter implements LocaleNumberConverterInterface
                 if ($scale !== '') {
                     $result[] = $scale;
                 }
+
                 return $result;
             });
 
@@ -106,7 +107,7 @@ class LatvianNumberConverter implements LocaleNumberConverterInterface
         $hundreds = (int) ($number / 100) % 10;
 
         return collect([
-            $hundreds > 0 ? ($hundreds === 1 ? 'simts' : self::UNITS[$hundreds] . ' simti') : null,
+            $hundreds > 0 ? ($hundreds === 1 ? 'simts' : self::UNITS[$hundreds].' simti') : null,
             $tens === 1 ? self::TEENS[$units] : ($tens > 1 ? self::TENS[$tens] : null),
             $units > 0 && $tens !== 1 ? self::UNITS[$units] : null,
         ])->filter()->implode(' ');
