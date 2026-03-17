@@ -75,9 +75,9 @@ class NumberQueueShowTest extends TestCase
     {
         NumberQueue::create(['value' => 1]);
 
-        $this->mock(NumberQueueToTextConversionService::class, function ($mock): void {
-            $mock->shouldReceive('execute')->once()->andThrow(new Exception('Database error'));
-        });
+        $mock = \Mockery::mock(NumberQueueToTextConversionService::class);
+        $mock->shouldReceive('execute')->once()->andThrow(new Exception('Database error'));
+        $this->instance(NumberQueueToTextConversionService::class, $mock);
 
         $response = $this->getJson('/api/numbers');
 
