@@ -1,0 +1,75 @@
+{
+	"info": {
+		"_postman_id": "c57e6473-9d7e-4db6-a456-b57b24ca746a",
+		"name": "Number Queue",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28608757"
+	},
+	"item": [
+		{
+			"name": "store",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "number",
+							"value": "",
+							"description": "{number} >= 0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{base_url}}/api/numbers",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"numbers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "show",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{base_url}}/api/numbers",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"numbers"
+					],
+					"query": [
+						{
+							"key": "locale",
+							"value": "lv",
+							"description": "['en', 'lv']",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
