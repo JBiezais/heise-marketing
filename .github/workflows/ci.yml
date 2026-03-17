@@ -177,4 +177,4 @@ jobs:
         run: php artisan migrate --force
 
       - name: Run tests with coverage
-        run: php artisan test --parallel --coverage --min=100
+        run: php artisan test --coverage --min=100
