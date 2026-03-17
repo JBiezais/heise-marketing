@@ -1,58 +1,96 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Number Queue Service
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A REST API service that converts numbers to text format. Numbers are stored in a LIFO (Last In, First Out) queue.
 
-## About Laravel
+## Table of Contents
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- [About](#about)
+- [Setup (Sail / Docker)](#setup-sail--docker)
+- [Postman Setup](#postman-setup)
+  - [Import the collection](#import-the-collection)
+  - [Configure the base URL](#configure-the-base-url)
+- [API Routes](#api-routes)
+  - [Responses](#responses)
+  - [Example usage](#example-usage)
+- [License](#license)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## About
 
-## Learning Laravel
+- **Number Queue Service** – converts numbers to text format (e.g. `5` → `"Five"`)
+- **LIFO queue** – last added number is retrieved first
+- **REST API** – Laravel-based
+- **Languages** – English (default), Latvian (optional)
+- **Storage** – PostgreSQL
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**Tech stack:** Laravel, PostgreSQL, [Laravel Sail](https://laravel.com/docs/sail), [kwn/number-to-words](https://github.com/kwn/number-to-words)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Setup (Sail / Docker)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop)
 
-### Premium Partners
+1. Clone the repository
+2. Copy `.env.example` to `.env`
+3. Configure for Sail:
+   - `DB_CONNECTION=pgsql`
+   - `DB_HOST=pgsql`
+   - `DB_PORT=5432`
+   - `APP_URL=http://localhost` (or `http://localhost:80` depending on `APP_PORT`)
+4. Install dependencies: `composer install`
+5. Generate app key: `php artisan key:generate`
+6. Start Sail: `./vendor/bin/sail up -d` (or `sail up -d` if using the alias)
+7. Run migrations: `./vendor/bin/sail artisan migrate`
+8. Access the service at `http://localhost` (or `http://localhost:${APP_PORT}`)
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+> **Note:** First-time Sail startup may take a few minutes while Docker builds the image.
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Postman Setup
 
-## Code of Conduct
+### Import the collection
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Open Postman
+2. Go to **File → Import**
+3. Select `postman/Number Queue.postman_collection.json` from the project root
+4. Alternatively: drag and drop the file into Postman
 
-## Security Vulnerabilities
+### Configure the base URL
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The collection uses the `{{base_url}}` variable. Set it as follows:
+
+1. Create an **Environment** (or edit the Collection variables)
+2. Add variable: `base_url` = `http://localhost` (or `http://localhost:80` if using a different `APP_PORT`)
+3. Select the environment in Postman before sending requests
+
+---
+
+## API Routes
+
+| Method | Endpoint       | Description                               | Body / Query                         |
+|--------|----------------|-------------------------------------------|--------------------------------------|
+| POST   | `/api/numbers` | Add number to queue                       | `number` (form-data, integer ≥ 0)     |
+| GET    | `/api/numbers` | Retrieve number from queue as text (LIFO) | `locale` (optional: `en` or `lv`)     |
+
+### Responses
+
+| Status | Description |
+|--------|-------------|
+| **201** | `{"message": "Number added"}` |
+| **200** | `{"text": "Five"}` (or Latvian equivalent with `locale=lv`) |
+| **404** | `{"message": "No numbers available in queue"}` when queue is empty |
+| **422** | Validation error if `number` is missing, not an integer, or &lt; 0 |
+
+### Example usage
+
+1. **Add numbers:** POST 1, 2, 3, 4, 5 → each returns `{"message": "Number added"}`
+2. **Get numbers:** GET → returns `"Five"`, `"Four"`, `"Three"`, `"Two"`, `"One"` (LIFO order)
+3. **Empty queue:** GET again → `{"message": "No numbers available in queue"}`
+
+---
 
 ## License
 
