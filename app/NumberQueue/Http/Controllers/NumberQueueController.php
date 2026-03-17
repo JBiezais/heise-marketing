@@ -9,7 +9,9 @@ use App\NumberQueue\Services\NumberQueueStore\NumberQueueStoreService;
 use App\NumberQueue\Services\NumberQueueToTextConversion\Data\NumberQueueToTextConversionData;
 use App\NumberQueue\Services\NumberQueueToTextConversion\NumberQueueToTextConversionService;
 use App\Shared\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class NumberQueueController extends Controller
 {
@@ -17,7 +19,13 @@ class NumberQueueController extends Controller
     {
         $data = NumberQueueStoreData::fromRequest($request);
 
-        $numberQueueService->execute($data);
+        try {
+            $numberQueueService->execute($data);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         return response()->json(['message' => 'Number added'], 201);
     }
@@ -26,7 +34,13 @@ class NumberQueueController extends Controller
     {
         $data = NumberQueueToTextConversionData::fromRequest($request);
 
-        $text = $numberQueueToTextConversionService->execute($data);
+        try {
+            $text = $numberQueueToTextConversionService->execute($data);
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Something went wrong',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         if ($text === null) {
             return response()->json(['message' => 'No numbers available in queue'], 404);

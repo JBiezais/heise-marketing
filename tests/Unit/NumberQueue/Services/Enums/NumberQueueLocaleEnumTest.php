@@ -21,4 +21,12 @@ class NumberQueueLocaleEnumTest extends TestCase
 
         $this->assertSame('One', $converter->convert(1));
     }
+
+    public function test_get_converter_returns_latvian_converter_for_lv(): void
+    {
+        $converter = NumberQueueLocaleEnum::LV->getConverter();
+
+        $this->assertInstanceOf(LocaleNumberConverterInterface::class, $converter);
+        $this->assertSame('Viens', $converter->convert(1));
+    }
 }

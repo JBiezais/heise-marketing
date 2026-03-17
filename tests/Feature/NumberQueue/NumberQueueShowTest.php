@@ -3,6 +3,8 @@
 namespace Tests\Feature\NumberQueue;
 
 use App\NumberQueue\Database\Models\NumberQueue;
+use App\NumberQueue\Services\NumberQueueToTextConversion\NumberQueueToTextConversionService;
+use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -49,6 +51,16 @@ class NumberQueueShowTest extends TestCase
             ->assertJson(['text' => 'One']);
     }
 
+    public function test_show_returns_latvian_text_when_locale_is_lv(): void
+    {
+        NumberQueue::create(['value' => 42]);
+
+        $response = $this->getJson('/api/numbers?locale=lv');
+
+        $response->assertStatus(200)
+            ->assertJson(['text' => 'Četrdesmit divi']);
+    }
+
     public function test_show_validation_rejects_invalid_locale(): void
     {
         NumberQueue::create(['value' => 1]);
@@ -57,5 +69,19 @@ class NumberQueueShowTest extends TestCase
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors(['locale']);
+    }
+
+    public function test_show_returns_422_when_service_throws_exception(): void
+    {
+        NumberQueue::create(['value' => 1]);
+
+        $mock = \Mockery::mock(NumberQueueToTextConversionService::class);
+        $mock->shouldReceive('execute')->once()->andThrow(new Exception('Database error'));
+        $this->instance(NumberQueueToTextConversionService::class, $mock);
+
+        $response = $this->getJson('/api/numbers');
+
+        $response->assertStatus(422)
+            ->assertJson(['message' => 'Something went wrong']);
     }
 }

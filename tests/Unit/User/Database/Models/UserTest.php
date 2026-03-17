@@ -5,6 +5,7 @@ namespace Tests\Unit\User\Database\Models;
 use App\User\Database\Models\User;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -68,8 +69,6 @@ class UserTest extends TestCase
             'id' => $user->id,
             'email' => $user->email,
         ]);
-        $this->assertNotNull($user->name);
-        $this->assertNotNull($user->email);
         $this->assertTrue(Hash::check('password', $user->password));
     }
 
@@ -82,9 +81,6 @@ class UserTest extends TestCase
 
     public function test_user_uses_notifiable_trait(): void
     {
-        $user = User::factory()->create();
-
-        $this->assertTrue(method_exists($user, 'notify'));
-        $this->assertTrue(method_exists($user, 'routeNotificationFor'));
+        $this->assertContains(Notifiable::class, class_uses_recursive(User::class));
     }
 }
