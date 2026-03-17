@@ -34,16 +34,11 @@ A REST API service that converts numbers to text format. Numbers are stored in a
 
 1. Clone the repository
 2. Copy `.env.example` to `.env`
-3. Configure for Sail:
-   - `DB_CONNECTION=pgsql`
-   - `DB_HOST=pgsql`
-   - `DB_PORT=5432`
-   - `APP_URL=http://localhost` (or `http://localhost:80` depending on `APP_PORT`)
-4. Install dependencies: `composer install`
-5. Generate app key: `php artisan key:generate`
-6. Start Sail: `./vendor/bin/sail up -d` (or `sail up -d` if using the alias)
-7. Run migrations: `./vendor/bin/sail artisan migrate`
-8. Access the service at `http://localhost` (or `http://localhost:${APP_PORT}`)
+3. Install dependencies: `composer install`
+4. Start Sail: `./vendor/bin/sail up -d` (or `sail up -d` if using the alias)
+5. Generate app key: `./vendor/bin/sail artisan key:generate`
+6. Run migrations: `./vendor/bin/sail artisan migrate`
+7. Access the service at `http://localhost` (or `http://localhost:${APP_PORT}`)
 
 > **Note:** First-time Sail startup may take a few minutes while Docker builds the image.
 
