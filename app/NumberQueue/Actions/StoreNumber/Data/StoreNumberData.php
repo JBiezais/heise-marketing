@@ -1,10 +1,10 @@
 <?php
 
-namespace App\NumberQueue\Services\NumberQueueStore\Data;
+namespace App\NumberQueue\Actions\StoreNumber\Data;
 
 use App\NumberQueue\Http\Requests\NumberQueueStoreRequest;
 
-class NumberQueueStoreData
+class StoreNumberData
 {
     public function __construct(
         public readonly int $number

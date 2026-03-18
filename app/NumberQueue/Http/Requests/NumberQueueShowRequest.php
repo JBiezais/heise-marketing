@@ -2,7 +2,7 @@
 
 namespace App\NumberQueue\Http\Requests;
 
-use App\NumberQueue\Services\NumberQueueToTextConversion\Enums\NumberQueueLocaleEnum;
+use App\NumberQueue\Actions\ConvertNextNumber\Enums\NumberQueueLocale;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +19,7 @@ class NumberQueueShowRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'locale' => ['sometimes', 'string', Rule::enum(NumberQueueLocaleEnum::class)],
+            'locale' => ['sometimes', 'string', Rule::enum(NumberQueueLocale::class)],
         ];
     }
 }

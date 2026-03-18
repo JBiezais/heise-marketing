@@ -2,10 +2,11 @@
 
 namespace Tests\Feature\NumberQueue;
 
+use App\NumberQueue\Actions\ConvertNextNumber\ConvertNextNumberAction;
 use App\NumberQueue\Database\Models\NumberQueue;
-use App\NumberQueue\Services\NumberQueueToTextConversion\NumberQueueToTextConversionService;
 use Exception;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mockery;
 use Tests\TestCase;
 
 class NumberQueueShowTest extends TestCase
@@ -75,9 +76,9 @@ class NumberQueueShowTest extends TestCase
     {
         NumberQueue::create(['value' => 1]);
 
-        $mock = \Mockery::mock(NumberQueueToTextConversionService::class);
+        $mock = Mockery::mock(ConvertNextNumberAction::class);
         $mock->shouldReceive('execute')->once()->andThrow(new Exception('Database error'));
-        $this->instance(NumberQueueToTextConversionService::class, $mock);
+        $this->instance(ConvertNextNumberAction::class, $mock);
 
         $response = $this->getJson('/api/numbers');
 

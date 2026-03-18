@@ -21,8 +21,8 @@
             <directory suffix=".php">app/User/Database/Migrations</directory>
             <directory suffix=".php">app/NumberQueue/Database/Migrations</directory>
             <directory suffix=".php">app/User/Database/Factories</directory>
-            <directory suffix=".php">app/NumberQueue/Services/NumberQueueToTextConversion/Data</directory>
-            <directory suffix=".php">app/NumberQueue/Services/NumberQueueStore/Data</directory>
+            <directory suffix=".php">app/NumberQueue/Actions/StoreNumber/Data</directory>
+            <directory suffix=".php">app/NumberQueue/Actions/ConvertNextNumber/Data</directory>
         </exclude>
     </source>
     <php>

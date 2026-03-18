@@ -1,25 +1,25 @@
 <?php
 
-namespace Tests\Unit\NumberQueue\Services;
+namespace Tests\Unit\NumberQueue\Services\NumberToWordsConverter;
 
-use App\NumberQueue\Services\NumberQueueToTextConversion\Services\Interface\LocaleNumberConverterInterface;
-use App\NumberQueue\Services\NumberQueueToTextConversion\Services\LatvianNumberConverter;
+use App\NumberQueue\Services\NumberToWordsConverter\LatvianNumberToWordsConverter;
+use App\NumberQueue\Services\NumberToWordsConverter\NumberToWordsConverter;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class LatvianNumberConverterTest extends TestCase
+class LatvianNumberToWordsConverterTest extends TestCase
 {
-    public function test_convert_implements_locale_converter_interface(): void
+    public function test_convert_implements_number_to_words_converter(): void
     {
-        $converter = new LatvianNumberConverter;
+        $converter = new LatvianNumberToWordsConverter;
 
-        $this->assertInstanceOf(LocaleNumberConverterInterface::class, $converter);
+        $this->assertInstanceOf(NumberToWordsConverter::class, $converter);
     }
 
     #[DataProvider('latvianConversionProvider')]
     public function test_convert_returns_correct_latvian_for_number(int $number, string $expected): void
     {
-        $converter = new LatvianNumberConverter;
+        $converter = new LatvianNumberToWordsConverter;
 
         $this->assertSame($expected, $converter->convert($number));
     }

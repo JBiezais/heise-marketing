@@ -13,5 +13,5 @@ parameters:
         - app/Shared/Database/Migrations
         - app/User/Database/Migrations
         - app/NumberQueue/Database/Migrations
-        - app/NumberQueue/Services/NumberQueueToTextConversion/Data
-        - app/NumberQueue/Services/NumberQueueStore/Data
+        - app/NumberQueue/Actions/StoreNumber/Data
+        - app/NumberQueue/Actions/ConvertNextNumber/Data

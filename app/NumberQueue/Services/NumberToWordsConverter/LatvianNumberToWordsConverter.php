@@ -1,11 +1,10 @@
 <?php
 
-namespace App\NumberQueue\Services\NumberQueueToTextConversion\Services;
+namespace App\NumberQueue\Services\NumberToWordsConverter;
 
-use App\NumberQueue\Services\NumberQueueToTextConversion\Services\Interface\LocaleNumberConverterInterface;
 use Illuminate\Support\Str;
 
-class LatvianNumberConverter implements LocaleNumberConverterInterface
+class LatvianNumberToWordsConverter implements NumberToWordsConverter
 {
     private const UNITS = [
         0 => '',

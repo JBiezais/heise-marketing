@@ -2,12 +2,12 @@
 
 namespace App\NumberQueue\Http\Controllers;
 
+use App\NumberQueue\Actions\ConvertNextNumber\ConvertNextNumberAction;
+use App\NumberQueue\Actions\ConvertNextNumber\Data\ConvertNextNumberData;
+use App\NumberQueue\Actions\StoreNumber\Data\StoreNumberData;
+use App\NumberQueue\Actions\StoreNumber\StoreNumberAction;
 use App\NumberQueue\Http\Requests\NumberQueueShowRequest;
 use App\NumberQueue\Http\Requests\NumberQueueStoreRequest;
-use App\NumberQueue\Services\NumberQueueStore\Data\NumberQueueStoreData;
-use App\NumberQueue\Services\NumberQueueStore\NumberQueueStoreService;
-use App\NumberQueue\Services\NumberQueueToTextConversion\Data\NumberQueueToTextConversionData;
-use App\NumberQueue\Services\NumberQueueToTextConversion\NumberQueueToTextConversionService;
 use App\Shared\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -15,12 +15,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class NumberQueueController extends Controller
 {
-    public function store(NumberQueueStoreRequest $request, NumberQueueStoreService $numberQueueService): JsonResponse
+    public function store(NumberQueueStoreRequest $request, StoreNumberAction $storeNumberAction): JsonResponse
     {
-        $data = NumberQueueStoreData::fromRequest($request);
+        $data = StoreNumberData::fromRequest($request);
 
         try {
-            $numberQueueService->execute($data);
+            $storeNumberAction->execute($data);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Something went wrong',
@@ -30,12 +30,12 @@ class NumberQueueController extends Controller
         return response()->json(['message' => 'Number added'], 201);
     }
 
-    public function show(NumberQueueShowRequest $request, NumberQueueToTextConversionService $numberQueueToTextConversionService): JsonResponse
+    public function show(NumberQueueShowRequest $request, ConvertNextNumberAction $convertNextNumberAction): JsonResponse
     {
-        $data = NumberQueueToTextConversionData::fromRequest($request);
+        $data = ConvertNextNumberData::fromRequest($request);
 
         try {
-            $text = $numberQueueToTextConversionService->execute($data);
+            $text = $convertNextNumberAction->execute($data);
         } catch (Exception $e) {
             return response()->json([
                 'message' => 'Something went wrong',

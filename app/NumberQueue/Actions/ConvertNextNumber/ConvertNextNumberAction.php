@@ -1,14 +1,14 @@
 <?php
 
-namespace App\NumberQueue\Services\NumberQueueToTextConversion;
+namespace App\NumberQueue\Actions\ConvertNextNumber;
 
+use App\NumberQueue\Actions\ConvertNextNumber\Data\ConvertNextNumberData;
 use App\NumberQueue\Database\Models\NumberQueue;
-use App\NumberQueue\Services\NumberQueueToTextConversion\Data\NumberQueueToTextConversionData;
 use Illuminate\Support\Facades\DB;
 
-class NumberQueueToTextConversionService
+class ConvertNextNumberAction
 {
-    public function execute(NumberQueueToTextConversionData $data): ?string
+    public function execute(ConvertNextNumberData $data): ?string
     {
         $row = DB::transaction(function () {
             $row = NumberQueue::query()

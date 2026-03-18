@@ -1,11 +1,10 @@
 <?php
 
-namespace App\NumberQueue\Services\NumberQueueToTextConversion\Services;
+namespace App\NumberQueue\Services\NumberToWordsConverter;
 
-use App\NumberQueue\Services\NumberQueueToTextConversion\Services\Interface\LocaleNumberConverterInterface;
 use NumberToWords\NumberToWords;
 
-class EnglishNumberConverter implements LocaleNumberConverterInterface
+class EnglishNumberToWordsConverter implements NumberToWordsConverter
 {
     public function convert(int $number): string
     {
